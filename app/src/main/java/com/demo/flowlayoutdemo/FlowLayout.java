@@ -67,6 +67,7 @@ public class FlowLayout extends ViewGroup {
 
     /**
      * 计算子View摆放的位置
+     * onLayout的作用就是确定子View的位置
      * @param changed
      * @param l
      * @param t
@@ -74,31 +75,21 @@ public class FlowLayout extends ViewGroup {
      * @param b
      */
 
-//    @Override
-//    protected void onLayout(boolean changed, int l, int t, int r, int b) {
-//        if (!mNeedLayout && changed){
-//            mNeedLayout = false;
-//            int left = getPaddingLeft();//获取最初的左上点
-//            int top = getPaddingTop();
-//            int count = mLines.size();
-//            for (int i = 0; i < count; i++) {
-//                Line line = mLines.get(i);
-//                line.LayoutView(left,top);//摆放每一行中子View的位置
-//                top +=line.mHeight+ mVerticalSpacing;//为下一行的top赋值
-//            }
-//        }
-//    }
+
 
     @Override
     protected void onLayout(boolean changed, int l, int t, int r, int b) {
         if (changed) {
-            int left = getPaddingLeft();//获取最初的左上点
+            //获取最初的左上点
+            int left = getPaddingLeft();
             int top = getPaddingTop();
             int count = mLines.size();
             for (int i = 0; i < count; i++) {
                 Line line = mLines.get(i);
-                line.LayoutView(left, top);//摆放每一行中子View的位置
-                top += line.mHeight + mVerticalSpacing;//为下一行的top赋值
+                /* 摆放每一行中子View的位置 */
+                line.LayoutView(left, top);
+                //为下一行的top赋值
+                top += line.mHeight + mVerticalSpacing;
             }
         }
     }
@@ -193,8 +184,10 @@ public class FlowLayout extends ViewGroup {
 
 
     class Line{
-        int mWidth = 0;// 该行中所有的子View累加的宽度
-        int mHeight = 0;// 该行中所有的子View中高度的那个子View的高度
+        // 该行中所有的子View累加的宽度
+        int mWidth = 0;
+        // 该行中所有的子View中高度的那个子View的高度
+        int mHeight = 0;
         List<View> views = new ArrayList<>();
 
         public int getViewCount() {
@@ -205,7 +198,8 @@ public class FlowLayout extends ViewGroup {
             views.add(view);
             mWidth += view.getMeasuredWidth();
             int childHeight = view.getMeasuredHeight();
-            mHeight = mHeight < childHeight ? childHeight : mHeight;//高度等于一行中最高的View
+            //高度等于一行中最高的View
+            mHeight = mHeight < childHeight ? childHeight : mHeight;
         }
         //摆放行中子View的位置
         public void LayoutView(int l, int t) {
